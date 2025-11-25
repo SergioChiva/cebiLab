@@ -1,0 +1,203 @@
+---
+---
+
+<nav class="navbar">
+  <div class="nav-container">
+    <h1 class="logo">Cebimar - CebiLab</h1>
+    <button id="logoutBtn" class="logout-btn">Cerrar Sesión</button>
+  </div>
+</nav>
+
+<div class="main-container">
+  <aside class="sidebar">
+    <h2>Navegación</h2>
+    <ul class="nav-menu">
+      <li>
+        <button class="nav-item active" data-section="estanterias">
+          <span class="icon">📦</span>
+          Estanterías de Esmaltes
+        </button>
+      </li>
+      <li>
+        <button class="nav-item" data-section="placeholder1">
+          <span class="icon">📊</span>
+          Sección 2 (Por definir)
+        </button>
+      </li>
+      <li>
+        <button class="nav-item" data-section="placeholder2">
+          <span class="icon">📈</span>
+          Sección 3 (Por definir)
+        </button>
+      </li>
+    </ul>
+  </aside>
+
+  <main class="content">
+    <div id="content-area"></div>
+    <div id="estanterias-wrapper"></div>
+  </main>
+</div>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .logout-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+  }
+
+  .logout-btn:hover {
+    background: white;
+    color: #667eea;
+  }
+
+  .main-container {
+    display: flex;
+    height: calc(100vh - 73px);
+  }
+
+  .sidebar {
+    width: 280px;
+    background: #f8f9fa;
+    padding: 2rem 1rem;
+    border-right: 1px solid #e0e0e0;
+    overflow-y: auto;
+  }
+
+  .sidebar h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+  }
+
+  .nav-menu {
+    list-style: none;
+  }
+
+  .nav-menu li {
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-item {
+    width: 100%;
+    text-align: left;
+    padding: 1rem;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .nav-item:hover {
+    border-color: #667eea;
+    transform: translateX(5px);
+  }
+
+  .nav-item.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #667eea;
+  }
+
+  .icon {
+    font-size: 1.5rem;
+  }
+
+  .content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    background: #ffffff;
+  }
+
+  #content-area {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+</style>
+
+<script>
+  const logoutBtn = document.getElementById('logoutBtn');
+  const navItems = document.querySelectorAll('.nav-item');
+  const contentArea = document.getElementById('content-area');
+  const estanteriasContent = document.getElementById('estanterias-content');
+
+  logoutBtn?.addEventListener('click', () => {
+    localStorage.removeItem('authenticated');
+    window.location.reload();
+  });
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navItems.forEach(nav => nav.classList.remove('active'));
+      item.classList.add('active');
+      
+      const section = item.getAttribute('data-section');
+      if (section) {
+        loadSection(section);
+      }
+    });
+  });
+
+  function loadSection(section: string) {
+    if (contentArea && estanteriasContent) {
+      if (section === 'estanterias') {
+        // Mostrar estanterías
+        estanteriasContent.style.display = 'block';
+        contentArea.style.display = 'none';
+        window.dispatchEvent(new CustomEvent('load-estanterias'));
+      } else {
+        // Ocultar estanterías y mostrar mensaje
+        estanteriasContent.style.display = 'none';
+        contentArea.style.display = 'block';
+        contentArea.innerHTML = `
+          <div style="text-align: center; padding: 3rem;">
+            <h2 style="color: #666; font-size: 2rem; margin-bottom: 1rem;">Sección en desarrollo</h2>
+            <p style="color: #999;">Esta sección estará disponible próximamente</p>
+          </div>
+        `;
+      }
+    }
+  }
+
+  // Cargar estanterías por defecto
+  setTimeout(() => {
+    loadSection('estanterias');
+  }, 100);
+</script>

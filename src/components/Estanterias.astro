@@ -1,0 +1,530 @@
+---
+// Estanterias.astro - Componente para gestionar cocios en estanterías
+---
+
+<div class="estanterias-container">
+  <h2>Gestión de Estanterías</h2>
+  
+  <div class="estanteria">
+    <!-- 4 filas de estantería (4 de alto) -->
+    <div class="estanteria-principal">
+      {Array.from({ length: 4 }).map((_, fila) => (
+        <div class="fila-estanteria">
+          {Array.from({ length: 8 }).map((_, columna) => (
+            <div 
+              class="cocio-slot" 
+              data-fila={fila} 
+              data-columna={columna}
+              data-tipo="estanteria"
+            >
+              <div class="cocio-empty">+</div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+    
+    <!-- Fila debajo de la estantería -->
+    <div class="fila-debajo">
+      {Array.from({ length: 8 }).map((_, columna) => (
+        <div 
+          class="cocio-slot" 
+          data-fila={4} 
+          data-columna={columna}
+          data-tipo="debajo"
+        >
+          <div class="cocio-empty">+</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<!-- Modal para añadir/editar cocio -->
+<div id="cocioModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3 id="modalTitle">Añadir Cocio</h3>
+    <form id="cocioForm">
+      <div class="form-group">
+        <label for="proveedor">Proveedor:</label>
+        <input type="text" id="proveedor" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="referencia">Referencia del Material:</label>
+        <input type="text" id="referencia" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="cantidad">Cantidad (Kg):</label>
+        <input type="number" id="cantidad" min="0" step="1" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" required />
+      </div>
+      
+      <div class="form-buttons">
+        <button type="submit" class="btn-guardar">Guardar</button>
+        <button type="button" class="btn-eliminar" id="btnEliminar">Eliminar</button>
+        <button type="button" class="btn-cancelar" id="btnCancelar">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .estanterias-container {
+    padding: 2.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+  }
+
+  h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 3rem;
+    font-size: 2.2rem;
+    font-weight: 600;
+  }
+
+  .estanteria {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .estanteria-principal {
+    background: #d4e3f7;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.5rem;
+  }
+
+  .fila-estanteria {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+  }
+
+  .fila-estanteria:last-child {
+    margin-bottom: 0;
+  }
+
+  .fila-debajo {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    padding: 2rem;
+    background: #e8f0f7;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .cocio-slot {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cocio-slot:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .cocio-empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 2px dashed #bdc3c7;
+    border-radius: 12px;
+    font-size: 2.5rem;
+    color: #bdc3c7;
+    transition: all 0.3s ease;
+  }
+
+  .cocio-slot:hover .cocio-empty {
+    background: #f0f4f8;
+    border-color: #7fa3c4;
+    color: #7fa3c4;
+  }
+
+  .cocio-filled {
+    width: 100%;
+    height: 100%;
+    padding: 0.8rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Colores según cantidad */
+  .cocio-filled.verde-oscuro {
+    background: linear-gradient(135deg, #6cb896 0%, #5a9d7e 100%);
+  }
+
+  .cocio-filled.verde-claro {
+    background: linear-gradient(135deg, #a8d5a4 0%, #8bc78a 100%);
+  }
+
+  .cocio-filled.amarillo {
+    background: linear-gradient(135deg, #f5d896 0%, #eac87a 100%);
+    color: #5a4a2a;
+  }
+
+  .cocio-filled.rojo {
+    background: linear-gradient(135deg, #f5a6a6 0%, #e88888 100%);
+  }
+
+  .cocio-info {
+    font-weight: 500;
+  }
+
+  .cocio-proveedor {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cocio-referencia {
+    font-size: 0.8rem;
+    margin-bottom: 0.3rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    opacity: 0.95;
+  }
+
+  .cocio-cantidad {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+
+  .cocio-fecha {
+    font-size: 0.75rem;
+    opacity: 0.9;
+  }
+
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-content {
+    background: white;
+    margin: 8% auto;
+    padding: 2.5rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .close {
+    color: #95a5a6;
+    float: right;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .close:hover {
+    color: #e74c3c;
+  }
+
+  #modalTitle {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #34495e;
+    font-weight: 500;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e6ed;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: #7fa3c4;
+    box-shadow: 0 0 0 3px rgba(127, 163, 196, 0.1);
+  }
+
+  .form-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .form-buttons button {
+    flex: 1;
+    padding: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-guardar {
+    background: linear-gradient(135deg, #6cb896 0%, #5a9d7e 100%);
+    color: white;
+  }
+
+  .btn-guardar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 184, 150, 0.4);
+  }
+
+  .btn-eliminar {
+    background: linear-gradient(135deg, #f5a6a6 0%, #e88888 100%);
+    color: white;
+    display: none;
+  }
+
+  .btn-eliminar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 166, 166, 0.4);
+  }
+
+  .btn-eliminar.visible {
+    display: block;
+  }
+
+  .btn-cancelar {
+    background: #e0e6ed;
+    color: #5a6c7d;
+  }
+
+  .btn-cancelar:hover {
+    background: #d0d6dd;
+  }
+</style>
+
+<script>
+  const API_URL = 'http://localhost:3000/api/cocios';
+  let cocios: { [key: string]: any } = {};
+  let currentSlot: HTMLElement | null = null;
+
+  const modal = document.getElementById('cocioModal');
+  const closeBtn = document.querySelector('.close');
+  const form = document.getElementById('cocioForm') as HTMLFormElement;
+  const btnEliminar = document.getElementById('btnEliminar');
+  const btnCancelar = document.getElementById('btnCancelar');
+  const modalTitle = document.getElementById('modalTitle');
+
+  // Cargar datos desde la API
+  async function loadData() {
+    try {
+      const response = await fetch(API_URL);
+      cocios = await response.json();
+      render();
+    } catch (error) {
+      console.error('Error cargando datos:', error);
+    }
+  }
+
+  // Renderizar todos los cocios
+  function render() {
+    document.querySelectorAll('.cocio-slot').forEach((slot) => {
+      const el = slot as HTMLElement;
+      const key = `${el.dataset.tipo}-${el.dataset.fila}-${el.dataset.columna}`;
+      const cocio = cocios[key];
+
+      if (cocio) {
+        const cant = parseInt(cocio.cantidad);
+        let color = '';
+        
+        if (cant >= 1000) {
+          color = 'background: linear-gradient(135deg, #6cb896 0%, #5a9d7e 100%);';
+        } else if (cant >= 500) {
+          color = 'background: linear-gradient(135deg, #a8d5a4 0%, #8bc78a 100%);';
+        } else if (cant >= 300) {
+          color = 'background: linear-gradient(135deg, #f5d896 0%, #eac87a 100%); color: #5a4a2a;';
+        } else {
+          color = 'background: linear-gradient(135deg, #f5a6a6 0%, #e88888 100%);';
+        }
+
+        const fecha = new Date(cocio.fecha).toLocaleDateString('es-ES', { 
+          day: '2-digit', 
+          month: '2-digit', 
+          year: 'numeric' 
+        });
+
+        el.innerHTML = `
+          <div style="width: 100%; height: 100%; padding: 0.8rem; border-radius: 12px; 
+                      display: flex; flex-direction: column; justify-content: space-between; 
+                      color: white; font-size: 0.85rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
+                      ${color}">
+            <div style="font-weight: 500;">
+              <div style="font-size: 0.9rem; font-weight: 700; margin-bottom: 0.3rem; 
+                          overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                ${cocio.proveedor}
+              </div>
+              <div style="font-size: 0.8rem; margin-bottom: 0.3rem; overflow: hidden; 
+                          text-overflow: ellipsis; white-space: nowrap; opacity: 0.95;">
+                Ref: ${cocio.referencia}
+              </div>
+              <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.2rem;">
+                ${cant} Kg
+              </div>
+              <div style="font-size: 0.75rem; opacity: 0.9;">
+                ${fecha}
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        el.innerHTML = '<div class="cocio-empty">+</div>';
+      }
+    });
+  }
+
+  // Click en slot
+  document.querySelectorAll('.cocio-slot').forEach((slot) => {
+    slot.addEventListener('click', function(this: HTMLElement) {
+      currentSlot = this;
+      const key = `${currentSlot.dataset.tipo}-${currentSlot.dataset.fila}-${currentSlot.dataset.columna}`;
+      const cocio = cocios[key];
+
+      if (cocio) {
+        modalTitle!.textContent = 'Editar Cocio';
+        (document.getElementById('proveedor') as HTMLInputElement).value = cocio.proveedor;
+        (document.getElementById('referencia') as HTMLInputElement).value = cocio.referencia;
+        (document.getElementById('cantidad') as HTMLInputElement).value = cocio.cantidad;
+        (document.getElementById('fecha') as HTMLInputElement).value = cocio.fecha;
+        btnEliminar!.classList.add('visible');
+      } else {
+        modalTitle!.textContent = 'Añadir Cocio';
+        form.reset();
+        (document.getElementById('fecha') as HTMLInputElement).value = new Date().toISOString().split('T')[0];
+        btnEliminar!.classList.remove('visible');
+      }
+
+      modal!.style.display = 'block';
+    });
+  });
+
+  // Cerrar modal
+  closeBtn?.addEventListener('click', () => {
+    modal!.style.display = 'none';
+    currentSlot = null;
+  });
+
+  btnCancelar?.addEventListener('click', () => {
+    modal!.style.display = 'none';
+    currentSlot = null;
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      modal!.style.display = 'none';
+      currentSlot = null;
+    }
+  });
+
+  // Guardar
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!currentSlot) return;
+
+    const key = `${currentSlot.dataset.tipo}-${currentSlot.dataset.fila}-${currentSlot.dataset.columna}`;
+    const data = {
+      key,
+      proveedor: (document.getElementById('proveedor') as HTMLInputElement).value,
+      referencia: (document.getElementById('referencia') as HTMLInputElement).value,
+      cantidad: parseInt((document.getElementById('cantidad') as HTMLInputElement).value),
+      fecha: (document.getElementById('fecha') as HTMLInputElement).value
+    };
+
+    try {
+      await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      await loadData();
+      modal!.style.display = 'none';
+      currentSlot = null;
+    } catch (error) {
+      console.error('Error guardando cocio:', error);
+    }
+  });
+
+  // Eliminar
+  btnEliminar?.addEventListener('click', async () => {
+    if (!currentSlot) return;
+
+    const key = `${currentSlot.dataset.tipo}-${currentSlot.dataset.fila}-${currentSlot.dataset.columna}`;
+    
+    try {
+      await fetch(`${API_URL}/${encodeURIComponent(key)}`, {
+        method: 'DELETE'
+      });
+      
+      await loadData();
+      modal!.style.display = 'none';
+      currentSlot = null;
+    } catch (error) {
+      console.error('Error eliminando cocio:', error);
+    }
+  });
+
+  // Cargar datos al inicio
+  loadData();
+</script>
