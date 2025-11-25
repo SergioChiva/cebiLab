@@ -1,5 +1,5 @@
 {
-  "name": "c-users-sergi-onedrive-escritorio-proyectos-web-cebilab",
+  "name": "cebilab",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -9,6 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.16.0"
+    "@astrojs/vercel": "^9.0.1",
+    "astro": "^5.16.0",
+    "mongoose": "^8.20.1"
   }
 }
