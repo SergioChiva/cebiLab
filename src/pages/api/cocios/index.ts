@@ -2,10 +2,34 @@ import type { APIRoute } from 'astro';
 import { connectDB } from '../../../lib/db';
 import { Cocio } from '../../../models/Cocio';
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ url }) => {
   try {
     await connectDB();
-    const cocios = await Cocio.find();
+    
+    // Obtener parámetros de búsqueda
+    const proveedor = url.searchParams.get('proveedor');
+    const referencia = url.searchParams.get('referencia');
+    const cantidadMin = url.searchParams.get('cantidadMin');
+    const cantidadMax = url.searchParams.get('cantidadMax');
+    
+    // Construir filtro dinámico
+    const filtro: any = {};
+    
+    if (proveedor) {
+      filtro.proveedor = { $regex: proveedor, $options: 'i' }; // Búsqueda case-insensitive
+    }
+    
+    if (referencia) {
+      filtro.referencia = { $regex: referencia, $options: 'i' };
+    }
+    
+    if (cantidadMin || cantidadMax) {
+      filtro.cantidad = {};
+      if (cantidadMin) filtro.cantidad.$gte = Number(cantidadMin);
+      if (cantidadMax) filtro.cantidad.$lte = Number(cantidadMax);
+    }
+    
+    const cocios = await Cocio.find(filtro);
     
     const cociosObj: Record<string, any> = {};
     cocios.forEach(cocio => {
