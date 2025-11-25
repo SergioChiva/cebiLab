@@ -48,7 +48,20 @@
     <form id="cocioForm">
       <div class="form-group">
         <label for="proveedor">Proveedor:</label>
-        <input type="text" id="proveedor" required />
+        <div class="proveedor-input-wrapper">
+          <input 
+            type="text" 
+            id="proveedor" 
+            list="proveedoresList" 
+            placeholder="Escribe o selecciona un proveedor"
+            required 
+          />
+          <button type="button" id="btnAgregarProveedor" class="btn-add-proveedor" title="Agregar nuevo proveedor">
+            +
+          </button>
+        </div>
+        <datalist id="proveedoresList"></datalist>
+        <div id="proveedorStatus" class="proveedor-status"></div>
       </div>
       
       <div class="form-group">
@@ -288,6 +301,52 @@
     font-weight: 500;
   }
 
+  .proveedor-input-wrapper {
+    display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .proveedor-input-wrapper input {
+    flex: 1;
+  }
+
+  .btn-add-proveedor {
+    width: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-add-proveedor:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+
+  .proveedor-status {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    min-height: 1.2rem;
+  }
+
+  .proveedor-status.nuevo {
+    color: #667eea;
+    font-weight: 500;
+  }
+
+  .proveedor-status.existente {
+    color: #6cb896;
+    font-weight: 500;
+  }
+
   .form-group input {
     width: 100%;
     padding: 0.8rem;
@@ -357,7 +416,9 @@
 
 <script>
   const API_URL = '/api/cocios';
+  const PROVEEDORES_URL = '/api/proveedores';
   let cocios: { [key: string]: any } = {};
+  let proveedores: any[] = [];
   let currentSlot: HTMLElement | null = null;
 
   const modal = document.getElementById('cocioModal');
@@ -365,7 +426,51 @@
   const form = document.getElementById('cocioForm') as HTMLFormElement;
   const btnEliminar = document.getElementById('btnEliminar');
   const btnCancelar = document.getElementById('btnCancelar');
+  const btnAgregarProveedor = document.getElementById('btnAgregarProveedor');
   const modalTitle = document.getElementById('modalTitle');
+  const proveedorInput = document.getElementById('proveedor') as HTMLInputElement;
+  const proveedorStatus = document.getElementById('proveedorStatus');
+
+  // Cargar proveedores desde la API
+  async function loadProveedores() {
+    try {
+      const response = await fetch(PROVEEDORES_URL);
+      proveedores = await response.json();
+      updateProveedoresList();
+    } catch (error) {
+      console.error('Error cargando proveedores:', error);
+    }
+  }
+
+  // Actualizar el datalist de proveedores
+  function updateProveedoresList() {
+    const datalist = document.getElementById('proveedoresList');
+    if (datalist) {
+      datalist.innerHTML = proveedores
+        .map(p => `<option value="${p.nombre}">`)
+        .join('');
+    }
+  }
+
+  // Agregar nuevo proveedor
+  async function agregarProveedor(nombre: string) {
+    try {
+      const response = await fetch(PROVEEDORES_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre })
+      });
+      
+      if (response.ok) {
+        await loadProveedores();
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error agregando proveedor:', error);
+      return false;
+    }
+  }
 
   // Cargar datos desde la API
   async function loadData() {
@@ -482,10 +587,21 @@
     e.preventDefault();
     if (!currentSlot) return;
 
+    const proveedorNombre = (document.getElementById('proveedor') as HTMLInputElement).value.trim();
+    
+    // Verificar si el proveedor es nuevo y agregarlo automáticamente
+    const existe = proveedores.some(p => 
+      p.nombre.toLowerCase() === proveedorNombre.toLowerCase()
+    );
+
+    if (!existe && proveedorNombre) {
+      await agregarProveedor(proveedorNombre);
+    }
+
     const key = `${currentSlot.dataset.tipo}-${currentSlot.dataset.fila}-${currentSlot.dataset.columna}`;
     const data = {
       key,
-      proveedor: (document.getElementById('proveedor') as HTMLInputElement).value,
+      proveedor: proveedorNombre,
       referencia: (document.getElementById('referencia') as HTMLInputElement).value,
       cantidad: parseInt((document.getElementById('cantidad') as HTMLInputElement).value),
       fecha: (document.getElementById('fecha') as HTMLInputElement).value
@@ -525,6 +641,59 @@
     }
   });
 
+  // Event listener para el input de proveedor
+  proveedorInput?.addEventListener('input', () => {
+    const valor = proveedorInput.value.trim();
+    if (valor === '') {
+      proveedorStatus!.textContent = '';
+      proveedorStatus!.className = 'proveedor-status';
+      return;
+    }
+
+    const existe = proveedores.some(p => 
+      p.nombre.toLowerCase() === valor.toLowerCase()
+    );
+
+    if (existe) {
+      proveedorStatus!.textContent = '✓ Proveedor existente';
+      proveedorStatus!.className = 'proveedor-status existente';
+    } else {
+      proveedorStatus!.textContent = '+ Se agregará como nuevo proveedor';
+      proveedorStatus!.className = 'proveedor-status nuevo';
+    }
+  });
+
+  // Botón para agregar proveedor manualmente
+  btnAgregarProveedor?.addEventListener('click', async () => {
+    const nombre = proveedorInput?.value.trim();
+    
+    if (!nombre) {
+      alert('Por favor, escribe el nombre del proveedor');
+      return;
+    }
+
+    const existe = proveedores.some(p => 
+      p.nombre.toLowerCase() === nombre.toLowerCase()
+    );
+
+    if (existe) {
+      alert('Este proveedor ya existe en la lista');
+      return;
+    }
+
+    const agregado = await agregarProveedor(nombre);
+    if (agregado) {
+      proveedorStatus!.textContent = '✓ Proveedor agregado exitosamente';
+      proveedorStatus!.className = 'proveedor-status existente';
+      setTimeout(() => {
+        proveedorStatus!.textContent = '✓ Proveedor existente';
+      }, 2000);
+    } else {
+      alert('Error al agregar el proveedor');
+    }
+  });
+
   // Cargar datos al inicio
+  loadProveedores();
   loadData();
 </script>
