@@ -14,9 +14,12 @@ app.use(cors());
 app.use(express.json());
 
 // Conectar a MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/cebilab')
-  .then(() => console.log('✅ Conectado a MongoDB'))
-  .catch((err) => console.error('❌ Error conectando a MongoDB:', err));
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('✅ Conectado a MongoDB Atlas'))
+.catch(err => console.error('❌ Error conectando a MongoDB Atlas:', err));
 
 // Rutas
 
@@ -68,6 +71,6 @@ app.delete('/api/cocios/:key', async (req, res) => {
 });
 
 // Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-});
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Servidor funcionando en el puerto", process.env.PORT || 3000);
+})
