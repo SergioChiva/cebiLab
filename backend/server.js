@@ -14,12 +14,9 @@ app.use(cors());
 app.use(express.json());
 
 // Conectar a MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('✅ Conectado a MongoDB Atlas'))
-.catch(err => console.error('❌ Error conectando a MongoDB Atlas:', err));
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('✅ Conectado a MongoDB'))
+  .catch(err => console.error('❌ Error conectando a MongoDB:', err));
 
 // Rutas
 
@@ -38,7 +35,8 @@ app.get('/api/cocios', async (req, res) => {
     });
     res.json(cociosObj);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener cocios' });
+    console.error('Error al obtener cocios:', error);
+    res.status(500).json({ error: 'Error al obtener cocios', details: error.message });
   }
 });
 
