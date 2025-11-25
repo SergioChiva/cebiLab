@@ -524,8 +524,8 @@
   /* Responsive Design - Mobile */
   @media (max-width: 768px) {
     .filtros-panel {
-      padding: 1.5rem;
-      margin: 0 1rem 2rem;
+      padding: 1rem;
+      margin: 0 0.5rem 1.5rem;
     }
 
     .filtros-grid {
@@ -542,37 +542,46 @@
     }
 
     .estanteria-principal {
-      padding: 1rem;
-      overflow-x: auto;
-      margin: 0 1rem 2rem;
+      padding: 0.5rem;
+      margin: 0 0.5rem 1.5rem;
     }
 
     .fila-estanteria {
-      gap: 0.8rem;
-      margin-bottom: 0.8rem;
+      gap: 0.4rem;
+      margin-bottom: 0.4rem;
+      flex-wrap: wrap;
     }
 
     .fila-debajo {
-      padding: 1rem;
-      gap: 0.8rem;
-      overflow-x: auto;
-      margin: 0 1rem;
+      padding: 0.5rem;
+      gap: 0.4rem;
+      margin: 0 0.5rem;
+      flex-wrap: wrap;
     }
 
     .cocio-slot {
-      width: 90px;
-      height: 90px;
+      width: 70px;
+      height: 70px;
       flex-shrink: 0;
+    }
+
+    .cocio-info {
+      font-size: 0.6rem;
+      padding: 0.25rem;
+    }
+
+    .cocio-empty {
+      font-size: 0.7rem;
     }
 
     .modal-content {
       width: 95%;
-      padding: 2rem;
-      margin: 10% auto;
+      padding: 1.5rem;
+      margin: 5% auto;
     }
 
     #modalTitle {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
     }
 
     .form-group input,
@@ -591,82 +600,84 @@
 
   @media (max-width: 480px) {
     .filtros-panel {
-      padding: 1rem;
-      margin: 0 0.5rem 1.5rem;
+      padding: 0.8rem;
+      margin: 0 0.3rem 1rem;
     }
 
     .estanteria-principal {
-      padding: 0.8rem;
-      margin: 0 0.5rem 1.5rem;
+      padding: 0.3rem;
+      margin: 0 0.3rem 1rem;
     }
 
     .fila-estanteria {
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
+      gap: 0.3rem;
+      margin-bottom: 0.3rem;
     }
 
     .fila-debajo {
-      padding: 0.8rem;
-      gap: 0.5rem;
-      margin: 0 0.5rem;
+      padding: 0.3rem;
+      gap: 0.3rem;
+      margin: 0 0.3rem;
     }
 
     .cocio-slot {
-      width: 70px;
-      height: 70px;
-      border-radius: 8px;
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
     }
 
     .cocio-info {
-      font-size: 0.65rem;
-      padding: 0.3rem;
+      font-size: 0.55rem;
+      padding: 0.2rem;
     }
 
     .cocio-empty {
-      font-size: 0.75rem;
+      font-size: 0.65rem;
     }
 
     .modal-content {
-      padding: 1.5rem;
-      margin: 5% auto;
+      padding: 1.2rem;
+      margin: 3% auto;
     }
 
     #modalTitle {
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
     }
 
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
     }
 
     .form-group label {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
   }
 
-  /* Scroll horizontal con estilo en móvil */
-  @media (max-width: 768px) {
-    .estanteria-principal::-webkit-scrollbar,
-    .fila-debajo::-webkit-scrollbar {
-      height: 8px;
+  /* Para pantallas muy pequeñas */
+  @media (max-width: 380px) {
+    .cocio-slot {
+      width: 50px;
+      height: 50px;
+      border-radius: 5px;
     }
 
-    .estanteria-principal::-webkit-scrollbar-track,
-    .fila-debajo::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 10px;
+    .cocio-info {
+      font-size: 0.5rem;
+      padding: 0.15rem;
     }
 
-    .estanteria-principal::-webkit-scrollbar-thumb,
-    .fila-debajo::-webkit-scrollbar-thumb {
-      background: rgba(127, 163, 196, 0.5);
-      border-radius: 10px;
+    .cocio-empty {
+      font-size: 0.6rem;
     }
 
-    .estanteria-principal::-webkit-scrollbar-thumb:hover,
-    .fila-debajo::-webkit-scrollbar-thumb:hover {
-      background: rgba(127, 163, 196, 0.7);
+    .fila-estanteria {
+      gap: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .fila-debajo {
+      gap: 0.25rem;
     }
   }
 </style>
