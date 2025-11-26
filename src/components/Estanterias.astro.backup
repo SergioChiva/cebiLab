@@ -3,10 +3,7 @@
 ---
 
 <div class="estanterias-container">
-  <div class="header-container">
-    <h2>Gestión de Estanterías</h2>
-    <button type="button" id="btnNuevaEstanteria" class="btn-nueva-estanteria">+ Nueva Estantería</button>
-  </div>
+  <h2>Gestión de Estanterías</h2>
   
   <!-- Panel de Filtros -->
   <div class="filtros-panel">
@@ -38,14 +35,45 @@
     </div>
   </div>
   
-  <!-- Contenedor dinámico para estanterías -->
-  <div id="estanteriasContainer"></div>
+  <div class="estanteria">
+    <!-- 4 filas de estantería (4 de alto) -->
+    <div class="estanteria-principal">
+      {Array.from({ length: 4 }).map((_, fila) => (
+        <div class="fila-estanteria">
+          {Array.from({ length: 8 }).map((_, columna) => (
+            <div 
+              class="cocio-slot" 
+              data-fila={fila} 
+              data-columna={columna}
+              data-tipo="estanteria"
+            >
+              <div class="cocio-empty">+</div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+    
+    <!-- Fila debajo de la estantería -->
+    <div class="fila-debajo">
+      {Array.from({ length: 8 }).map((_, columna) => (
+        <div 
+          class="cocio-slot" 
+          data-fila={4} 
+          data-columna={columna}
+          data-tipo="debajo"
+        >
+          <div class="cocio-empty">+</div>
+        </div>
+      ))}
+    </div>
+  </div>
 </div>
 
 <!-- Modal para añadir/editar cocio -->
 <div id="cocioModal" class="modal">
   <div class="modal-content">
-    <span class="close" data-modal="cocio">&times;</span>
+    <span class="close">&times;</span>
     <h3 id="modalTitle">Añadir Cocio</h3>
     <form id="cocioForm">
       <div class="form-group">
@@ -90,36 +118,6 @@
   </div>
 </div>
 
-<!-- Modal para crear/editar estantería -->
-<div id="estanteriaModal" class="modal">
-  <div class="modal-content">
-    <span class="close" data-modal="estanteria">&times;</span>
-    <h3 id="estanteriaModalTitle">Nueva Estantería</h3>
-    <form id="estanteriaForm">
-      <div class="form-group">
-        <label for="nombreEstanteria">Nombre de la Estantería:</label>
-        <input type="text" id="nombreEstanteria" placeholder="Ej: Almacén Principal" required />
-      </div>
-      
-      <div class="form-group">
-        <label for="filasEstanteria">Número de Filas:</label>
-        <input type="number" id="filasEstanteria" min="1" max="10" value="4" required />
-      </div>
-      
-      <div class="form-group">
-        <label for="columnasEstanteria">Número de Columnas:</label>
-        <input type="number" id="columnasEstanteria" min="1" max="12" value="8" required />
-      </div>
-      
-      <div class="form-buttons">
-        <button type="submit" class="btn-guardar">Crear Estantería</button>
-        <button type="button" class="btn-eliminar-estanteria" id="btnEliminarEstanteria" style="display:none;">Eliminar Estantería</button>
-        <button type="button" class="btn-cancelar" id="btnCancelarEstanteria">Cancelar</button>
-      </div>
-    </form>
-  </div>
-</div>
-
 <style>
   .estanterias-container {
     padding: 2.5rem;
@@ -127,38 +125,12 @@
     min-height: 100vh;
   }
 
-  .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1400px;
-    margin: 0 auto 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
   h2 {
+    text-align: center;
     color: #2c3e50;
+    margin-bottom: 2rem;
     font-size: 2.2rem;
     font-weight: 600;
-    margin: 0;
-  }
-
-  .btn-nueva-estanteria {
-    padding: 0.8rem 1.5rem;
-    background: linear-gradient(135deg, #7fa3c4 0%, #6b8db3 100%);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .btn-nueva-estanteria:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(127, 163, 196, 0.4);
   }
 
   /* Panel de Filtros */
@@ -241,65 +213,7 @@
 
   .estanteria {
     max-width: 1400px;
-    margin: 0 auto 3rem;
-    background: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-
-  .estanteria-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #e0e6ed;
-  }
-
-  .estanteria-titulo {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2c3e50;
-  }
-
-  .estanteria-controles {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .btn-agregar-fila,
-  .btn-editar-estanteria,
-  .btn-eliminar-est {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .btn-agregar-fila {
-    background: linear-gradient(135deg, #6cb896 0%, #5a9d7e 100%);
-    color: white;
-  }
-
-  .btn-editar-estanteria {
-    background: linear-gradient(135deg, #f5c77e 0%, #e6a846 100%);
-    color: white;
-  }
-
-  .btn-eliminar-est {
-    background: linear-gradient(135deg, #f5a6a6 0%, #e88888 100%);
-    color: white;
-  }
-
-  .btn-agregar-fila:hover,
-  .btn-editar-estanteria:hover,
-  .btn-eliminar-est:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin: 0 auto;
   }
 
   .estanteria-principal {
@@ -307,7 +221,7 @@
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    margin-bottom: 0;
+    margin-bottom: 2.5rem;
   }
 
   .fila-estanteria {
@@ -321,7 +235,15 @@
     margin-bottom: 0;
   }
 
-
+  .fila-debajo {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    padding: 2rem;
+    background: #e8f0f7;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
 
   .cocio-slot {
     width: 120px;
@@ -590,16 +512,6 @@
     display: block;
   }
 
-  .btn-eliminar-estanteria {
-    background: linear-gradient(135deg, #f5a6a6 0%, #e88888 100%);
-    color: white;
-  }
-
-  .btn-eliminar-estanteria:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(245, 166, 166, 0.4);
-  }
-
   .btn-cancelar {
     background: #e0e6ed;
     color: #5a6c7d;
@@ -611,16 +523,6 @@
 
   /* Responsive Design - Mobile */
   @media (max-width: 768px) {
-    .header-container {
-      flex-direction: column;
-      align-items: stretch;
-      margin: 0 0.5rem 1.5rem;
-    }
-
-    .btn-nueva-estanteria {
-      width: 100%;
-    }
-
     .filtros-panel {
       padding: 1rem;
       margin: 0 0.5rem 1.5rem;
@@ -639,37 +541,21 @@
       width: 100%;
     }
 
-    .estanteria {
-      margin: 0 0.5rem 2rem;
-      padding: 1rem;
-    }
-
-    .estanteria-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-
-    .estanteria-controles {
-      width: 100%;
-      flex-wrap: wrap;
-    }
-
-    .btn-agregar-fila,
-    .btn-editar-estanteria,
-    .btn-eliminar-est {
-      flex: 1;
-      min-width: 100px;
-    }
-
     .estanteria-principal {
       padding: 0.5rem;
-      margin-bottom: 0;
+      margin: 0 0.5rem 1.5rem;
     }
 
     .fila-estanteria {
       gap: 0.4rem;
       margin-bottom: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .fila-debajo {
+      padding: 0.5rem;
+      gap: 0.4rem;
+      margin: 0 0.5rem;
       flex-wrap: wrap;
     }
 
@@ -728,6 +614,12 @@
       margin-bottom: 0.3rem;
     }
 
+    .fila-debajo {
+      padding: 0.3rem;
+      gap: 0.3rem;
+      margin: 0 0.3rem;
+    }
+
     .cocio-slot {
       width: 60px;
       height: 60px;
@@ -784,35 +676,28 @@
       margin-bottom: 0.25rem;
     }
 
+    .fila-debajo {
+      gap: 0.25rem;
+    }
   }
 </style>
 
 <script>
   const API_URL = '/api/cocios';
   const PROVEEDORES_URL = '/api/proveedores';
-  const ESTANTERIAS_URL = '/api/estanterias';
-  
   let cocios: { [key: string]: any } = {};
   let proveedores: any[] = [];
-  let estanterias: any[] = [];
   let currentSlot: HTMLElement | null = null;
-  let currentEstanteriaId: string | null = null;
 
-  // Modales y elementos
-  const cocioModal = document.getElementById('cocioModal');
-  const estanteriaModal = document.getElementById('estanteriaModal');
-  const cocioForm = document.getElementById('cocioForm') as HTMLFormElement;
-  const estanteriaForm = document.getElementById('estanteriaForm') as HTMLFormElement;
+  const modal = document.getElementById('cocioModal');
+  const closeBtn = document.querySelector('.close');
+  const form = document.getElementById('cocioForm') as HTMLFormElement;
   const btnEliminar = document.getElementById('btnEliminar');
   const btnCancelar = document.getElementById('btnCancelar');
   const btnAgregarProveedor = document.getElementById('btnAgregarProveedor');
   const modalTitle = document.getElementById('modalTitle');
   const proveedorInput = document.getElementById('proveedor') as HTMLInputElement;
   const proveedorStatus = document.getElementById('proveedorStatus');
-  const btnNuevaEstanteria = document.getElementById('btnNuevaEstanteria');
-  const btnCancelarEstanteria = document.getElementById('btnCancelarEstanteria');
-  const btnEliminarEstanteria = document.getElementById('btnEliminarEstanteria');
-  const estanteriasContainer = document.getElementById('estanteriasContainer');
 
   // Cargar proveedores desde la API
   async function loadProveedores() {
@@ -894,59 +779,11 @@
     loadData();
   }
 
-  // Cargar estanterías
-  async function loadEstanterias() {
-    try {
-      const response = await fetch(ESTANTERIAS_URL);
-      estanterias = await response.json();
-      renderEstanterias();
-    } catch (error) {
-      console.error('Error cargando estanterías:', error);
-    }
-  }
-
-  // Renderizar estanterías dinámicamente
-  function renderEstanterias() {
-    if (!estanteriasContainer) return;
-    
-    estanteriasContainer.innerHTML = estanterias.map(est => `
-      <div class="estanteria" data-estanteria-id="${est._id}">
-        <div class="estanteria-header">
-          <h3 class="estanteria-titulo">${est.nombre}</h3>
-          <div class="estanteria-controles">
-            <button class="btn-agregar-fila" data-estanteria-id="${est._id}">+ Fila</button>
-            <button class="btn-editar-estanteria" data-estanteria-id="${est._id}">✎ Editar</button>
-            <button class="btn-eliminar-est" data-estanteria-id="${est._id}">🗑 Eliminar</button>
-          </div>
-        </div>
-        <div class="estanteria-principal">
-          ${Array.from({ length: est.filas }).map((_, fila) => `
-            <div class="fila-estanteria">
-              ${Array.from({ length: est.columnas }).map((_, columna) => `
-                <div class="cocio-slot" 
-                     data-fila="${fila}" 
-                     data-columna="${columna}"
-                     data-estanteria-id="${est._id}">
-                  <div class="cocio-empty">+</div>
-                </div>
-              `).join('')}
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `).join('');
-    
-    attachSlotListeners();
-    attachEstanteriaListeners();
-    loadData();
-  }
-
-  // Renderizar cocios
+  // Renderizar todos los cocios
   function render() {
     document.querySelectorAll('.cocio-slot').forEach((slot) => {
       const el = slot as HTMLElement;
-      const estId = el.dataset.estanteriaId;
-      const key = `${estId}-${el.dataset.fila}-${el.dataset.columna}`;
+      const key = `${el.dataset.tipo}-${el.dataset.fila}-${el.dataset.columna}`;
       const cocio = cocios[key];
 
       if (cocio) {
@@ -998,136 +835,57 @@
     });
   }
 
-  // Agregar listeners a los slots
-  function attachSlotListeners() {
-    document.querySelectorAll('.cocio-slot').forEach((slot) => {
-      slot.addEventListener('click', function(this: HTMLElement) {
-        currentSlot = this;
-        const estId = currentSlot.dataset.estanteriaId!;
-        const key = `${estId}-${currentSlot.dataset.fila}-${currentSlot.dataset.columna}`;
-        const cocio = cocios[key];
+  // Click en slot
+  document.querySelectorAll('.cocio-slot').forEach((slot) => {
+    slot.addEventListener('click', function(this: HTMLElement) {
+      currentSlot = this;
+      const key = `${currentSlot.dataset.tipo}-${currentSlot.dataset.fila}-${currentSlot.dataset.columna}`;
+      const cocio = cocios[key];
 
-        if (cocio) {
-          modalTitle!.textContent = 'Editar Cocio';
-          (document.getElementById('proveedor') as HTMLInputElement).value = cocio.proveedor;
-          (document.getElementById('referencia') as HTMLInputElement).value = cocio.referencia;
-          (document.getElementById('cantidad') as HTMLInputElement).value = cocio.cantidad;
-          (document.getElementById('fecha') as HTMLInputElement).value = cocio.fecha;
-          btnEliminar!.classList.add('visible');
-        } else {
-          modalTitle!.textContent = 'Añadir Cocio';
-          cocioForm.reset();
-          (document.getElementById('fecha') as HTMLInputElement).value = new Date().toISOString().split('T')[0];
-          btnEliminar!.classList.remove('visible');
-        }
-
-        cocioModal!.style.display = 'block';
-      });
-    });
-  }
-
-  // Agregar listeners a controles de estanterías
-  function attachEstanteriaListeners() {
-    // Botón agregar fila
-    document.querySelectorAll('.btn-agregar-fila').forEach(btn => {
-      btn.addEventListener('click', async function(this: HTMLElement) {
-        const estId = this.dataset.estanteriaId!;
-        const estanteria = estanterias.find(e => e._id === estId);
-        if (!estanteria) return;
-
-        try {
-          await fetch(`${ESTANTERIAS_URL}/${estId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              ...estanteria,
-              filas: estanteria.filas + 1
-            })
-          });
-          await loadEstanterias();
-        } catch (error) {
-          console.error('Error agregando fila:', error);
-        }
-      });
-    });
-
-    // Botón editar estantería
-    document.querySelectorAll('.btn-editar-estanteria').forEach(btn => {
-      btn.addEventListener('click', function(this: HTMLElement) {
-        const estId = this.dataset.estanteriaId!;
-        const estanteria = estanterias.find(e => e._id === estId);
-        if (!estanteria) return;
-
-        currentEstanteriaId = estId;
-        (document.getElementById('nombreEstanteria') as HTMLInputElement).value = estanteria.nombre;
-        (document.getElementById('filasEstanteria') as HTMLInputElement).value = estanteria.filas;
-        (document.getElementById('columnasEstanteria') as HTMLInputElement).value = estanteria.columnas;
-        (document.getElementById('estanteriaModalTitle') as HTMLElement).textContent = 'Editar Estantería';
-        btnEliminarEstanteria!.style.display = 'block';
-        estanteriaModal!.style.display = 'block';
-      });
-    });
-
-    // Botón eliminar estantería
-    document.querySelectorAll('.btn-eliminar-est').forEach(btn => {
-      btn.addEventListener('click', async function(this: HTMLElement) {
-        if (!confirm('¿Seguro que deseas eliminar esta estantería? Se perderán todos los cocios asociados.')) return;
-        
-        const estId = this.dataset.estanteriaId!;
-        try {
-          await fetch(`${ESTANTERIAS_URL}/${estId}`, {
-            method: 'DELETE'
-          });
-          await loadEstanterias();
-        } catch (error) {
-          console.error('Error eliminando estantería:', error);
-        }
-      });
-    });
-  }
-
-  // Cerrar modales
-  document.querySelectorAll('.close').forEach(btn => {
-    btn.addEventListener('click', function(this: HTMLElement) {
-      const modalType = this.dataset.modal;
-      if (modalType === 'cocio') {
-        cocioModal!.style.display = 'none';
-        currentSlot = null;
-      } else if (modalType === 'estanteria') {
-        estanteriaModal!.style.display = 'none';
-        currentEstanteriaId = null;
+      if (cocio) {
+        modalTitle!.textContent = 'Editar Cocio';
+        (document.getElementById('proveedor') as HTMLInputElement).value = cocio.proveedor;
+        (document.getElementById('referencia') as HTMLInputElement).value = cocio.referencia;
+        (document.getElementById('cantidad') as HTMLInputElement).value = cocio.cantidad;
+        (document.getElementById('fecha') as HTMLInputElement).value = cocio.fecha;
+        btnEliminar!.classList.add('visible');
+      } else {
+        modalTitle!.textContent = 'Añadir Cocio';
+        form.reset();
+        (document.getElementById('fecha') as HTMLInputElement).value = new Date().toISOString().split('T')[0];
+        btnEliminar!.classList.remove('visible');
       }
+
+      modal!.style.display = 'block';
     });
   });
 
-  btnCancelar?.addEventListener('click', () => {
-    cocioModal!.style.display = 'none';
+  // Cerrar modal
+  closeBtn?.addEventListener('click', () => {
+    modal!.style.display = 'none';
     currentSlot = null;
   });
 
-  btnCancelarEstanteria?.addEventListener('click', () => {
-    estanteriaModal!.style.display = 'none';
-    currentEstanteriaId = null;
+  btnCancelar?.addEventListener('click', () => {
+    modal!.style.display = 'none';
+    currentSlot = null;
   });
 
   window.addEventListener('click', (event) => {
-    if (event.target === cocioModal) {
-      cocioModal!.style.display = 'none';
+    if (event.target === modal) {
+      modal!.style.display = 'none';
       currentSlot = null;
-    }
-    if (event.target === estanteriaModal) {
-      estanteriaModal!.style.display = 'none';
-      currentEstanteriaId = null;
     }
   });
 
-  // Guardar cocio
-  cocioForm?.addEventListener('submit', async (e: Event) => {
+  // Guardar
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!currentSlot) return;
 
     const proveedorNombre = (document.getElementById('proveedor') as HTMLInputElement).value.trim();
     
+    // Verificar si el proveedor es nuevo y agregarlo automáticamente
     const existe = proveedores.some(p => 
       p.nombre.toLowerCase() === proveedorNombre.toLowerCase()
     );
@@ -1136,15 +894,13 @@
       await agregarProveedor(proveedorNombre);
     }
 
-    const estId = currentSlot.dataset.estanteriaId!;
-    const key = `${estId}-${currentSlot.dataset.fila}-${currentSlot.dataset.columna}`;
+    const key = `${currentSlot.dataset.tipo}-${currentSlot.dataset.fila}-${currentSlot.dataset.columna}`;
     const data = {
       key,
       proveedor: proveedorNombre,
       referencia: (document.getElementById('referencia') as HTMLInputElement).value,
       cantidad: parseInt((document.getElementById('cantidad') as HTMLInputElement).value),
-      fecha: (document.getElementById('fecha') as HTMLInputElement).value,
-      estanteriaId: estId
+      fecha: (document.getElementById('fecha') as HTMLInputElement).value
     };
 
     try {
@@ -1155,19 +911,18 @@
       });
       
       await loadData();
-      cocioModal!.style.display = 'none';
+      modal!.style.display = 'none';
       currentSlot = null;
     } catch (error) {
       console.error('Error guardando cocio:', error);
     }
   });
 
-  // Eliminar cocio
+  // Eliminar
   btnEliminar?.addEventListener('click', async () => {
     if (!currentSlot) return;
 
-    const estId = currentSlot.dataset.estanteriaId!;
-    const key = `${estId}-${currentSlot.dataset.fila}-${currentSlot.dataset.columna}`;
+    const key = `${currentSlot.dataset.tipo}-${currentSlot.dataset.fila}-${currentSlot.dataset.columna}`;
     
     try {
       await fetch(`${API_URL}/${encodeURIComponent(key)}`, {
@@ -1175,76 +930,11 @@
       });
       
       await loadData();
-      cocioModal!.style.display = 'none';
+      modal!.style.display = 'none';
       currentSlot = null;
     } catch (error) {
       console.error('Error eliminando cocio:', error);
     }
-  });
-
-  // Guardar estantería (crear o editar)
-  estanteriaForm?.addEventListener('submit', async (e: Event) => {
-    e.preventDefault();
-
-    const nombre = (document.getElementById('nombreEstanteria') as HTMLInputElement).value.trim();
-    const filas = parseInt((document.getElementById('filasEstanteria') as HTMLInputElement).value);
-    const columnas = parseInt((document.getElementById('columnasEstanteria') as HTMLInputElement).value);
-
-    const data = { nombre, filas, columnas, orden: estanterias.length };
-
-    try {
-      if (currentEstanteriaId) {
-        // Editar
-        await fetch(`${ESTANTERIAS_URL}/${currentEstanteriaId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-      } else {
-        // Crear
-        await fetch(ESTANTERIAS_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-      }
-      
-      await loadEstanterias();
-      estanteriaModal!.style.display = 'none';
-      currentEstanteriaId = null;
-      estanteriaForm.reset();
-    } catch (error) {
-      console.error('Error guardando estantería:', error);
-      alert('Error al guardar la estantería. Verifica que el nombre no esté duplicado.');
-    }
-  });
-
-  // Eliminar estantería desde el modal
-  btnEliminarEstanteria?.addEventListener('click', async () => {
-    if (!currentEstanteriaId) return;
-    if (!confirm('¿Seguro que deseas eliminar esta estantería? Se perderán todos los cocios asociados.')) return;
-
-    try {
-      await fetch(`${ESTANTERIAS_URL}/${currentEstanteriaId}`, {
-        method: 'DELETE'
-      });
-      await loadEstanterias();
-      estanteriaModal!.style.display = 'none';
-      currentEstanteriaId = null;
-    } catch (error) {
-      console.error('Error eliminando estantería:', error);
-    }
-  });
-
-  // Botón nueva estantería
-  btnNuevaEstanteria?.addEventListener('click', () => {
-    currentEstanteriaId = null;
-    estanteriaForm.reset();
-    (document.getElementById('filasEstanteria') as HTMLInputElement).value = '4';
-    (document.getElementById('columnasEstanteria') as HTMLInputElement).value = '8';
-    (document.getElementById('estanteriaModalTitle') as HTMLElement).textContent = 'Nueva Estantería';
-    btnEliminarEstanteria!.style.display = 'none';
-    estanteriaModal!.style.display = 'block';
   });
 
   // Event listener para el input de proveedor
@@ -1312,7 +1002,7 @@
     });
   });
 
-  // Inicializar
+  // Cargar datos al inicio
   loadProveedores();
-  loadEstanterias();
+  loadData();
 </script>

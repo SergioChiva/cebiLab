@@ -21,6 +21,10 @@ const cocioSchema = new mongoose.Schema({
   fecha: {
     type: String,
     required: true
+  },
+  estanteriaId: {
+    type: String,
+    default: null
   }
 }, {
   timestamps: true
