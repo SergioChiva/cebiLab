@@ -1,6 +1,7 @@
 ---
 import Login from '../components/Login.astro';
 import Estanterias from '../components/Estanterias.astro';
+import Hornos from '../components/Hornos.astro';
 ---
 
 <html lang="es">
@@ -41,9 +42,9 @@ import Estanterias from '../components/Estanterias.astro';
 								</button>
 							</li>
 							<li>
-								<button class="nav-item" data-section="placeholder1">
-									<span class="icon">📊</span>
-									Sección 2 (Por definir)
+								<button class="nav-item" data-section="hornos">
+									<span class="icon">🔥</span>
+									Hornos Cerámicos
 								</button>
 							</li>
 							<li>
@@ -59,6 +60,9 @@ import Estanterias from '../components/Estanterias.astro';
 					<main class="content">
 						<div id="estanterias-content">
 							<Estanterias />
+						</div>
+						<div id="hornos-content" style="display: none;">
+							<Hornos />
 						</div>
 						<div id="placeholder-content" style="display: none;">
 							<div style="text-align: center; padding: 3rem;">
@@ -312,6 +316,7 @@ import Estanterias from '../components/Estanterias.astro';
 			const logoutBtn = document.getElementById('logoutBtn');
 			const navItems = document.querySelectorAll('.nav-item');
 			const estanteriasContent = document.getElementById('estanterias-content');
+			const hornosContent = document.getElementById('hornos-content');
 			const placeholderContent = document.getElementById('placeholder-content');
 			const menuToggle = document.getElementById('menuToggle');
 			const sidebar = document.getElementById('sidebar');
@@ -346,15 +351,23 @@ import Estanterias from '../components/Estanterias.astro';
 					// Cerrar sidebar en móvil después de seleccionar
 					closeSidebar();
 					
+					// Ocultar todas las secciones primero
+					if (estanteriasContent) estanteriasContent.style.display = 'none';
+					if (hornosContent) hornosContent.style.display = 'none';
+					if (placeholderContent) placeholderContent.style.display = 'none';
+					
 					if (section === 'estanterias') {
-						if (estanteriasContent && placeholderContent) {
+						if (estanteriasContent) {
 							estanteriasContent.style.display = 'block';
-							placeholderContent.style.display = 'none';
 							window.dispatchEvent(new CustomEvent('load-estanterias'));
 						}
+					} else if (section === 'hornos') {
+						if (hornosContent) {
+							hornosContent.style.display = 'block';
+							window.dispatchEvent(new CustomEvent('load-hornos'));
+						}
 					} else {
-						if (estanteriasContent && placeholderContent) {
-							estanteriasContent.style.display = 'none';
+						if (placeholderContent) {
 							placeholderContent.style.display = 'block';
 						}
 					}

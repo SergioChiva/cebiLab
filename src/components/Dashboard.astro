@@ -21,9 +21,9 @@ let lol =
         </button>
       </li>
       <li>
-        <button class="nav-item" data-section="placeholder1">
-          <span class="icon">📊</span>
-          Sección 2 (Por definir)
+        <button class="nav-item" data-section="hornos">
+          <span class="icon">🔥</span>
+          Hornos Cerámicos
         </button>
       </li>
       <li>
@@ -38,6 +38,7 @@ let lol =
   <main class="content">
     <div id="content-area"></div>
     <div id="estanterias-wrapper"></div>
+    <div id="hornos-wrapper"></div>
   </main>
 </div>
 
@@ -159,6 +160,7 @@ let lol =
   const navItems = document.querySelectorAll('.nav-item');
   const contentArea = document.getElementById('content-area');
   const estanteriasContent = document.getElementById('estanterias-content');
+  const hornosContent = document.getElementById('hornos-content');
 
   logoutBtn?.addEventListener('click', () => {
     localStorage.removeItem('authenticated');
@@ -178,15 +180,22 @@ let lol =
   });
 
   function loadSection(section: string) {
-    if (contentArea && estanteriasContent) {
+    if (contentArea && estanteriasContent && hornosContent) {
+      // Ocultar todas las secciones primero
+      estanteriasContent.style.display = 'none';
+      hornosContent.style.display = 'none';
+      contentArea.style.display = 'none';
+
       if (section === 'estanterias') {
         // Mostrar estanterías
         estanteriasContent.style.display = 'block';
-        contentArea.style.display = 'none';
         window.dispatchEvent(new CustomEvent('load-estanterias'));
+      } else if (section === 'hornos') {
+        // Mostrar hornos
+        hornosContent.style.display = 'block';
+        window.dispatchEvent(new CustomEvent('load-hornos'));
       } else {
-        // Ocultar estanterías y mostrar mensaje
-        estanteriasContent.style.display = 'none';
+        // Mostrar mensaje de desarrollo
         contentArea.style.display = 'block';
         contentArea.innerHTML = `
           <div style="text-align: center; padding: 3rem;">
