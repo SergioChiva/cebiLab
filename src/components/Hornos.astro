@@ -44,128 +44,187 @@
 
 <style>
   .hornos-container {
-    padding: 20px;
+    padding: 30px;
     max-width: 1400px;
     margin: 0 auto;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
   }
 
   .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
+    padding: 20px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
 
   .header-container h2 {
-    color: #2c3e50;
-    font-size: 28px;
+    color: #1a202c;
+    font-size: 32px;
     margin: 0;
+    font-weight: 800;
+    background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .btn-nuevo-horno {
-    background-color: #27ae60;
+    background: linear-gradient(135deg, #e74c3c 0%, #e67e22 100%);
     color: white;
     border: none;
-    padding: 12px 24px;
-    border-radius: 6px;
+    padding: 14px 28px;
+    border-radius: 12px;
     cursor: pointer;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+    letter-spacing: 0.5px;
   }
 
   .btn-nuevo-horno:hover {
-    background-color: #229954;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+  }
+
+  .btn-nuevo-horno:active {
+    transform: translateY(-1px);
   }
 
   .hornos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
     margin-top: 20px;
   }
 
   .horno-card {
     background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    border: 2px solid #e0e0e0;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .horno-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
   }
 
   .horno-card:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(231, 76, 60, 0.2);
+    transform: translateY(-8px) scale(1.02);
+    border-color: #e74c3c;
   }
 
   .horno-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #3498db;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #f8f9fa;
   }
 
   .horno-nombre {
-    font-size: 20px;
-    font-weight: 700;
-    color: #2c3e50;
+    font-size: 22px;
+    font-weight: 800;
+    color: #1a202c;
     margin: 0;
+    letter-spacing: 0.3px;
   }
 
   .btn-editar-horno {
-    background-color: #3498db;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
     color: white;
     border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
+    padding: 8px 16px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.3s ease;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
   }
 
   .btn-editar-horno:hover {
-    background-color: #2980b9;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
   }
 
   .horno-info {
     margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .horno-dato {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #ecf0f1;
+    padding: 16px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    transition: all 0.3s ease;
   }
 
-  .horno-dato:last-child {
-    border-bottom: none;
+  .horno-dato:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    transform: translateX(5px);
   }
 
   .horno-label {
-    font-weight: 600;
-    color: #7f8c8d;
+    font-weight: 700;
+    color: #6c757d;
     font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .horno-label::before {
+    content: '•';
+    font-size: 20px;
+    color: #e74c3c;
   }
 
   .horno-valor {
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 24px;
+    font-weight: 900;
     color: #2c3e50;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
   }
 
   .temperatura-valor {
     color: #e74c3c;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .velocidad-valor {
     color: #f39c12;
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   /* Modal Styles */
@@ -178,100 +237,144 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   .modal-content {
-    background-color: #fefefe;
+    background: white;
     margin: 5% auto;
-    padding: 30px;
-    border: 1px solid #888;
-    border-radius: 8px;
+    padding: 40px;
+    border: none;
+    border-radius: 24px;
     width: 90%;
-    max-width: 500px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    max-width: 550px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-50px) scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
   .close {
-    color: #aaa;
+    color: #95a5a6;
     float: right;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: bold;
     cursor: pointer;
     line-height: 20px;
+    transition: all 0.3s ease;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
   }
 
-  .close:hover,
-  .close:focus {
-    color: #000;
+  .close:hover {
+    color: #e74c3c;
+    background: #fee;
+    transform: rotate(90deg);
   }
 
   .modal-content h3 {
     margin-top: 0;
-    color: #2c3e50;
-    font-size: 24px;
+    color: #1a202c;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
 
   .form-group label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #34495e;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 15px;
+    letter-spacing: 0.3px;
   }
 
   .form-group input {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 14px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
     font-size: 16px;
     box-sizing: border-box;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
   }
 
   .form-group input:focus {
     outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.1);
+    background: white;
+    transform: translateY(-2px);
   }
 
   .form-buttons {
     display: flex;
-    gap: 10px;
-    margin-top: 25px;
+    gap: 12px;
+    margin-top: 32px;
   }
 
   .form-buttons button {
     flex: 1;
-    padding: 12px;
+    padding: 14px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 12px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
+    letter-spacing: 0.5px;
   }
 
   .btn-guardar {
-    background-color: #27ae60;
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
     color: white;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
   }
 
   .btn-guardar:hover {
-    background-color: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
   }
 
   .btn-eliminar {
-    background-color: #e74c3c;
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
     color: white;
     display: none;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
   }
 
   .btn-eliminar:hover {
-    background-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
   }
 
   .btn-eliminar.show {
@@ -279,32 +382,45 @@
   }
 
   .btn-cancelar {
-    background-color: #95a5a6;
+    background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
     color: white;
+    box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
   }
 
   .btn-cancelar:hover {
-    background-color: #7f8c8d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(149, 165, 166, 0.4);
   }
 
   .empty-state {
     text-align: center;
-    padding: 60px 20px;
+    padding: 80px 20px;
     color: #7f8c8d;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
 
   .empty-state-icon {
-    font-size: 64px;
-    margin-bottom: 20px;
+    font-size: 80px;
+    margin-bottom: 24px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
   }
 
   .empty-state-text {
-    font-size: 18px;
-    margin-bottom: 10px;
+    font-size: 22px;
+    margin-bottom: 12px;
+    font-weight: 700;
+    color: #2c3e50;
   }
 
   .empty-state-subtext {
-    font-size: 14px;
+    font-size: 16px;
     color: #95a5a6;
   }
 </style>
