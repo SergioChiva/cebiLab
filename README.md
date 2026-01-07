@@ -4,11 +4,6 @@ Sistema web completo y moderno para la gestión de inventarios industriales, dis
 
 ## 🚀 Características Principales
 
-### ✅ Sistema de Autenticación
-- Login seguro con persistencia de sesión
-- Control de acceso al dashboard
-- Cierre de sesión funcional
-
 ### 📦 Gestión de Estanterías de Materiales
 - **Creación dinámica** de estanterías con filas y columnas personalizables
 - **Sistema CRUD completo** para materiales (cocios/esmaltes)
@@ -45,57 +40,10 @@ Sistema web completo y moderno para la gestión de inventarios industriales, dis
 
 ## 📋 Requisitos Previos
 
-- Node.js 18+ y npm
-- Cuenta en MongoDB Atlas (gratuita)
+- Node.js y npm
+- Cuenta en MongoDB Atlas
 - Git
 
-## 🔧 Instalación y Configuración
-
-### 1. Clonar el Repositorio
-
-```bash
-git clone https://github.com/SergioChiva/cebiLab.git
-cd cebiLab
-```
-
-### 2. Instalar Dependencias
-
-```bash
-npm install
-```
-
-### 3. Configurar Variables de Entorno
-
-Crea un archivo `.env` en la raíz del proyecto:
-
-```env
-MONGODB_URI=mongodb+srv://usuario:contraseña@cluster0.xxxxx.mongodb.net/cebilab?retryWrites=true&w=majority
-```
-
-**Obtener tu cadena de conexión de MongoDB:**
-
-1. Ve a [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register)
-2. Crea una cuenta gratuita
-3. Crea un cluster gratuito (M0)
-4. En "Database Access", crea un usuario con contraseña
-5. En "Network Access", añade `0.0.0.0/0` para permitir todas las conexiones
-6. En "Database", haz clic en "Connect" → "Connect your application"
-7. Copia la cadena de conexión y reemplaza `<password>` con tu contraseña
-
-### 4. Ejecutar en Desarrollo
-
-```bash
-npm run dev
-```
-
-Abre [http://localhost:4321](http://localhost:4321) en tu navegador.
-
-### 5. Construir para Producción
-
-```bash
-npm run build
-npm run preview
-```
 
 ## 📁 Estructura del Proyecto
 
@@ -207,32 +155,6 @@ Este sistema es **completamente adaptable**. Aquí algunos ejemplos:
 3. Cambia los textos y emojis en la interfaz
 4. Ajusta los campos de formulario según tu caso de uso
 
-## 🚀 Despliegue
-
-### Vercel (Recomendado)
-
-1. Sube tu código a GitHub
-2. Importa el repositorio en [Vercel](https://vercel.com)
-3. Añade la variable de entorno `MONGODB_URI`
-4. Despliega automáticamente
-
-### Otros Servicios
-
-También puedes desplegar en:
-- Netlify
-- Railway
-- Render
-- Heroku
-
-## 🤝 Contribuir
-
-Las contribuciones son bienvenidas. Para cambios importantes:
-
-1. Haz fork del repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
 
 ## 📝 Licencia
 
@@ -249,8 +171,3 @@ Este proyecto es de código abierto y está disponible bajo la licencia MIT. Si�
 - Construido con Astro y MongoDB
 - Inspirado en necesidades reales de gestión industrial
 
----
-
-💡 **¿Tienes dudas o sugerencias?** Abre un issue en GitHub o contacta directamente.
-
-🌟 **Si este proyecto te resulta útil, dale una estrella en GitHub!**
