@@ -2,7 +2,13 @@
 
 Sistema web completo y moderno para la gestión de inventarios industriales, diseñado inicialmente para el sector cerámico pero **100% adaptable a cualquier tipo de negocio**.
 
+###Inicio de sesión
+- Utiliza la contraseña : **vinagre**
+- Dale a iniciar sesión
+
 ## 🚀 Características Principales
+
+
 
 ### 📦 Gestión de Estanterías de Materiales
 - **Creación dinámica** de estanterías con filas y columnas personalizables
